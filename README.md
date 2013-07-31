@@ -20,7 +20,9 @@ You can see an up to date list of all ports in our [organization](https://github
 ## How to get started
 
 cd to HaskellVerbalExpressions
+
 `cabal install regex-pcre`
+
 `ghc Text/Regex/VerbalExpressions/verbalexpressions.hs examples.hs`
 
 ## Examples
@@ -73,6 +75,7 @@ Here you can find the API documentation for Verbal Expressions
 
 ## Basic usage
 Basic usage of Verbal Expressions is through a singleton, called `verEx`, that creates a new expression for you:
+
 ```haskell
 let expr = (all of your terms) $ verEx
 ```
