@@ -32,7 +32,7 @@ Here's a couple of simple examples to give an idea of how VerbalExpressions work
 ### Testing if we have a valid URL
 
 ```haskell
-// Create an example of how to test for correctly formed URLs
+-- Create an example of how to test for correctly formed URLs
 let expr = 	  endOfLine'
 				. anythingBut " "
 				. possibly "www"
@@ -43,10 +43,10 @@ let expr = 	  endOfLine'
 				. searchGlobal'
 				$ verEx
 
-// Use VerEx's test() function to find if it matches
+-- Use VerEx's test() function to find if it matches
 print $ test "http://www.google.com" expr
 
-// Ouputs the actual expression used: ^(?:http)(?:s)?(?:://)(?:www.)?(?:[^ ]*)$
+-- Ouputs the actual expression used: ^(?:http)(?:s)?(?:://)(?:www.)?(?:[^ ]*)$
 print $ expr
 ```
 
