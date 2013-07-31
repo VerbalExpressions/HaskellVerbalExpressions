@@ -1,4 +1,5 @@
 HaskellVerbalExpressions
+<<<<<<< HEAD
 ====================
 
 
@@ -114,3 +115,6 @@ let expr = (all of your terms) $ verEx
 * .add - String
 * .multiple - String
 * .alt
+=======
+========================
+>>>>>>> c6dd9cb0f1b4b45cebb1fc8958e3c8c63c7e242d
