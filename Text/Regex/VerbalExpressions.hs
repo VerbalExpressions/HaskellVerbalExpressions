@@ -31,7 +31,7 @@ module Text.Regex.VerbalExpressions
 
 import Text.Regex.PCRE (getAllTextMatches, (=~))
 import Data.Bits((.|.), (.&.), xor )
-import Data.List(intersperse, isPrefixOf)
+import Data.List(intercalate, isPrefixOf)
 
 type Flag = Int
 
@@ -57,21 +57,21 @@ verEx :: VerStruct
 verEx = VerStruct "" "" "" "" 0 
 
 withAnyCase :: VerStruct -> VerStruct
-withAnyCase v          = withAnyCase' True v
+withAnyCase = withAnyCase' True
 
 withAnyCase' :: Bool -> VerStruct -> VerStruct
 withAnyCase' True  v   = v { flags = flags v  .|.   ignorecase }
 withAnyCase' False v   = v { flags = flags v  `xor` ignorecase }
 
 searchOneLine :: VerStruct -> VerStruct
-searchOneLine v        = searchOneLine' True v
+searchOneLine = searchOneLine' True
 
 searchOneLine' :: Bool -> VerStruct -> VerStruct
 searchOneLine' True  v = v { flags = flags v  `xor` multiline  }
 searchOneLine' False v = v { flags = flags v  .|.   multiline  }
 
 searchGlobal :: VerStruct -> VerStruct
-searchGlobal v         = searchGlobal' True v
+searchGlobal = searchGlobal' True
 
 searchGlobal' :: Bool -> VerStruct -> VerStruct
 searchGlobal' True  v  = v { flags = flags v  .|.   global     }
@@ -82,73 +82,73 @@ add val v = v { pattern = foldl (++) "" [prefix v, source v, val, suffix v]
               , source  = foldl (++) "" [source v, val] }
 
 find :: String -> VerStruct -> VerStruct
-find val v         = add ("(?:"   ++ val ++ ")")   v
+find val = add ("(?:"   ++ val ++ ")")
 
 possibly :: String -> VerStruct -> VerStruct
-possibly val v     = add ("(?:"   ++ val ++ ")?")  v
+possibly val = add ("(?:"   ++ val ++ ")?")
 
 anything :: VerStruct -> VerStruct
-anything v         = add "(?:.*)"                  v
+anything = add "(?:.*)"
 
 anythingBut :: String -> VerStruct -> VerStruct
-anythingBut val v  = add ("(?:[^" ++ val ++ "]*)") v
+anythingBut val = add ("(?:[^" ++ val ++ "]*)")
 
 something :: VerStruct -> VerStruct
-something v        = add "(?:.+)"                  v
+something = add "(?:.+)"
 
 somethingBut :: String -> VerStruct -> VerStruct
-somethingBut val v = add ("(?:[^" ++ val ++ "]+)") v
+somethingBut val = add ("(?:[^" ++ val ++ "]+)")
 
 startOfLine :: VerStruct -> VerStruct
-startOfLine v        = startOfLine True v
+startOfLine = startOfLine' True v
 
 startOfLine' :: Bool -> VerStruct -> VerStruct
 startOfLine' True  v = add "" v { prefix = "^" }
 startOfLine' False v = add "" v { prefix = ""  }
 
 endOfLine :: VerStruct -> VerStruct
-endOfLine v          = endOfLine True v
+endOfLine = endOfLine' True v
 
 endOfLine' :: Bool -> VerStruct -> VerStruct
 endOfLine' True  v   = add "" v { suffix = "$" }
 endOfLine' False v   = add "" v { suffix = ""  }
 
 lineBreak :: VerStruct -> VerStruct
-lineBreak v  = add "(?:(?:\\n)|(?:\\r\\n))"        v
+lineBreak = add "(?:(?:\\n)|(?:\\r\\n))"
 
 br :: VerStruct -> VerStruct
-br v         = lineBreak                           v
+br = lineBreak
 
 tab :: VerStruct -> VerStruct
-tab v        = add "(\\t)"                         v
+tab = add "(\\t)"
 
 word :: VerStruct -> VerStruct
-word v       = add "(\\w+)"                        v
+word = add "(\\w+)"
 
 anyOf :: String -> VerStruct -> VerStruct
-anyOf val v  = add ("[" ++ val ++ "]")             v
+anyOf val = add ("[" ++ val ++ "]")
 
 range :: [String] -> VerStruct -> VerStruct
-range args v = add ("[" ++ buildrange args ++ "]") v
+range args = add ("[" ++ buildrange args ++ "]")
   where
-    buildrange xs | length xs >= 2 = head xs ++ "-" ++ (head $ tail xs) ++ (buildrange $ tail $ tail xs)
+    buildrange xs | length xs >= 2 = head xs ++ "+" ++ head (tail xs) ++ buildrange (tail $ tail xs)
                   | otherwise      = ""
 
 multiple :: String -> VerStruct -> VerStruct
 multiple val v  | head val == '*' = add val          v
                 | head val == '+' = add val          v
-                | otherwise       = add ("+" ++ val) v
+                | otherwise       = add ('+' : val)  v
 
 alt :: String -> VerStruct -> VerStruct
 alt val v = find val (add ")|(" v { prefix = checkPrefix, suffix = checkSuffix })
   where
     checkPrefix
-      | elem '(' (prefix v) == True = prefix v ++ "("
-      | otherwise                   = prefix v
+      | elem '(' (prefix v) = prefix v ++ "("
+      | otherwise           = prefix v
 
     checkSuffix
-      | elem ')' (suffix v) == True = ")" ++ suffix v
-      | otherwise                   = suffix v
+      | elem ')' (suffix v) = ")" ++ suffix v
+      | otherwise           = suffix v
 
 replace :: String -> String -> VerStruct -> String
 replace s val v = replacewords (getStringMatches s v) val s
@@ -165,20 +165,20 @@ test val v  | flags v .&. multiline > 0 = foundMatch val
     searcher value = getStringMatches value v
 
     resultOf :: [a] -> Bool
-    resultOf l = length l /= 0
+    resultOf = not . null
 
     globalSearch :: String -> [String]
-    globalSearch value = searcher value
+    globalSearch = searcher
 
     lineSearch :: String -> [String]
-    lineSearch value = foldl (++) [] (map searcher (lines value))
+    lineSearch = concatMap searcher . lines
 
 replacewords :: [String] -> String -> String -> String
 replacewords [] _ sen            = sen
 replacewords (x:xs) replacer sen = replacewords xs replacer (replacefirst x sen)
   where
     replacefirst :: String -> String -> String
-    replacefirst w s =  (head $ split w s) 
+    replacefirst w s =  head (split w s) 
                         ++ replacer
                         ++ join w (tail $ split w s)
 
@@ -195,7 +195,7 @@ split delim str =
       firstline : case remainder  of
                                   [] -> []
                                   x  -> if x == delim
-                                        then [] : []
+                                        then [[]]
                                         else split delim 
                                           (drop (length delim) x)
 breakList :: ([a] -> Bool) -> [a] -> ([a], [a])
@@ -210,4 +210,4 @@ spanList func list@(x:xs) =
     where (ys,zs) = spanList func xs
 
 join :: [a] -> [[a]] -> [a]
-join delim l = concat (intersperse delim l)
+join = intercalate

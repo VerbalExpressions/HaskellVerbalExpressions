@@ -1,0 +1,19 @@
+name:                verbalexpressions
+version:             1.0.0.0
+synopsis:            Regular expressions made easy
+description:         VerbalExpressions is a Haskell library that helps to construct
+                     difficult regular expressions.
+homepage:            https://github.com/VerbalExpressions/HaskellVerbalExpressions
+license:             MIT
+license-file:        LICENSE
+author:              whackashoe
+copyright:           (c) 2013, whackashoe
+category:            Text
+build-type:          Simple
+cabal-version:       >=1.8
+
+library
+  exposed-modules:     Text.Regex.VerbalExpressions
+  build-depends:       base ==4.6.*,
+                       regex-pcre
+  ghc-options:         -Wall
