@@ -3,14 +3,14 @@
 
     Here's some examples, first a http validator:
 
-    > let expr =    endOfLine'
+    > let expr =    endOfLine
     >                . anythingBut " "
     >                . possibly "www"
     >                . find "://"
     >                . possibly "s"
     >                . find "http"
-    >                . startOfLine'
-    >                . searchGlobal'
+    >                . startOfLine
+    >                . searchGlobal
     >                $ verEx
 
     You can use VerEx's test to find if it matches.
