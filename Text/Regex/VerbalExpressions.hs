@@ -100,14 +100,14 @@ somethingBut :: String -> VerStruct -> VerStruct
 somethingBut val = add ("(?:[^" ++ val ++ "]+)")
 
 startOfLine :: VerStruct -> VerStruct
-startOfLine = startOfLine' True v
+startOfLine = startOfLine' True
 
 startOfLine' :: Bool -> VerStruct -> VerStruct
 startOfLine' True  v = add "" v { prefix = "^" }
 startOfLine' False v = add "" v { prefix = ""  }
 
 endOfLine :: VerStruct -> VerStruct
-endOfLine = endOfLine' True v
+endOfLine = endOfLine' True
 
 endOfLine' :: Bool -> VerStruct -> VerStruct
 endOfLine' True  v   = add "" v { suffix = "$" }
