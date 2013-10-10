@@ -1,3 +1,41 @@
+{-| A library to make it easier to work with regular expressions. Based on the (original)
+    Javascript VerbalExpression library by jehna.
+
+    Here's some examples, first a http validator:
+
+    > let expr =    endOfLine'
+    >                . anythingBut " "
+    >                . possibly "www"
+    >                . find "://"
+    >                . possibly "s"
+    >                . find "http"
+    >                . startOfLine'
+    >                . searchGlobal'
+    >                $ verEx
+
+    You can use VerEx's test to find if it matches.
+
+    > test "http://www.google.com" expr
+    > True
+
+    The actual expression is the following in regexp:
+
+    > ^(?:http)(?:s)?(?:://)(?:www.)?(?:[^ ]*)$
+
+    Replacing a string.
+
+    > let replaceMe = "Replace bird with a duck"
+    > let expr2 = find "bird" $ verEx;
+    > foo = replace replaceMe "duck" expr2
+
+    The above can be shortened.
+
+    > bar = replace "We have a red house" "blue" . find "red" $ verEx
+
+    Basic usage of Verbal Expressions is through a singleton, called
+    verEx, that compiles it to a regexp.
+
+    > let expr = (all of your terms) $ verEx -}
 module Text.Regex.VerbalExpressions
   ( verEx
   , add
