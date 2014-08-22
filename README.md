@@ -33,15 +33,15 @@ Here's a couple of simple examples to give an idea of how VerbalExpressions work
 
 ```haskell
 -- Create an example of how to test for correctly formed URLs
-let expr = 	  endOfLine
-				. anythingBut " "
-				. possibly "www"
-				. find "://"
-				. possibly "s"
-				. find "http"
-				. startOfLine
-				. searchGlobal
-				$ verEx
+let expr = searchGlobal >>>
+            startOfLine >>>
+            find "http" >>>
+            possibly "s" >>>
+            find "://" >>>
+            possibly "www" >>>
+            anythingBut " " >>>
+            endOfLine
+            $ verEx
 
 -- Use VerEx's test() function to find if it matches
 print $ test "http://www.google.com" expr

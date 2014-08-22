@@ -4,15 +4,15 @@ import Control.Arrow
 main :: IO()
 main = do
 	--create an example of how to test for correctly formed URLs
-	let expr = 	  endOfLine
-				. anythingBut " "
-				. possibly "www"
-				. find "://"
-				. possibly "s"
-				. find "http"
-				. startOfLine
-				. searchGlobal
-				$ verEx
+	let expr = searchGlobal >>>
+			startOfLine >>>
+			find "http" >>>
+			possibly "s" >>>
+			find "://" >>>
+			possibly "www" >>>
+			anythingBut " " >>>
+			endOfLine
+			$ verEx
 
 	-- Use VerEx's test function to find if it matches
 	print $ test "http://www.google.com" expr
