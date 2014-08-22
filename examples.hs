@@ -1,16 +1,17 @@
 import Text.Regex.VerbalExpressions
+import Control.Arrow
 
 main :: IO()
 main = do
 	--create an example of how to test for correctly formed URLs
-	let expr = 	  endOfLine'
+	let expr = 	  endOfLine
 				. anythingBut " "
 				. possibly "www"
 				. find "://"
 				. possibly "s"
 				. find "http"
-				. startOfLine'
-				. searchGlobal'
+				. startOfLine
+				. searchGlobal
 				$ verEx
 
 	-- Use VerEx's test function to find if it matches
