@@ -21,7 +21,7 @@ You can see an up to date list of all ports on [VerbalExpressions.github.io](htt
 
 cd to HaskellVerbalExpressions
 
-`cabal install regex-pcre`
+`cabal install verbalexpressions.cabal`
 
 `ghc Text/Regex/VerbalExpressions/verbalexpressions.hs examples.hs`
 
