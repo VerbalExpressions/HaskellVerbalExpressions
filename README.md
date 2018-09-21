@@ -46,7 +46,7 @@ let expr = searchGlobal >>>
 -- Use VerEx's test() function to find if it matches
 print $ test "http://www.google.com" expr
 
--- Ouputs the actual expression used: ^(?:http)(?:s)?(?:://)(?:www.)?(?:[^ ]*)$
+-- Outputs the actual expression used: ^(?:http)(?:s)?(?:://)(?:www.)?(?:[^ ]*)$
 print $ expr
 ```
 
